@@ -1,12 +1,46 @@
+# services:
+#   lightrag:
+#     container_name: lightrag
+#     image: ghcr.io/hkuds/lightrag:latest
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#       tags:
+#         - ghcr.io/hkuds/lightrag:latest
+#     ports:
+#       - "${PORT:-9621}:9621"
+#     volumes:
+#       - ./data/rag_storage:/app/data/rag_storage
+#       - ./data/inputs:/app/data/inputs
+#       - ./config.ini:/app/config.ini
+#       - ./.env:/app/.env
+#     env_file:
+#       - .env
+#     restart: unless-stopped
+#     extra_hosts:
+#       - "host.docker.internal:host-gateway"
+version: "3.9"
+
 services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+
   lightrag:
     container_name: lightrag
     image: ghcr.io/hkuds/lightrag:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
-      tags:
-        - ghcr.io/hkuds/lightrag:latest
+    depends_on:
+      - ollama
     ports:
       - "${PORT:-9621}:9621"
     volumes:
@@ -17,5 +51,6 @@ services:
     env_file:
       - .env
     restart: unless-stopped
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+
+volumes:
+  ollama:

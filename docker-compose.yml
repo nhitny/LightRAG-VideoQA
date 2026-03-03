@@ -24,9 +24,9 @@ version: "3.9"
 services:
   ollama:
     image: ollama/ollama
-    container_name: ollama
+    container_name: ollama_nhi
     ports:
-      - "11434:11434"
+      - "11435:11434"
     volumes:
       - ollama:/root/.ollama
     restart: unless-stopped

@@ -303,3 +303,4 @@ MAX_PARALLEL_INSERT=2
 * ❌ Đổi embedding phải xoá dữ liệu
 * ❌ Không dùng `localhost` giữa container
 
+Đường dẫn truy cập: http://localhost:9621/webui/#/
